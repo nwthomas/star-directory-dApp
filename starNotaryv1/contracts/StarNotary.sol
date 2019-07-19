@@ -16,4 +16,12 @@ contract StarNotary {
         emit starClaimed(msg.sender);
     }
 
+    function changeName(string memory name) public returns (bool) {
+        starName = name;
+        return true;
+    }
+
+    function getStarName() public view returns (string memory) {
+        return starName;
+    }
 }
