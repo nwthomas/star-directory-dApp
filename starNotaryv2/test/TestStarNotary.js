@@ -71,3 +71,21 @@ it("lets user1 get the funds after the sale", async () => {
     Number(user1BalancePriorToSale)
   );
 });
+
+it("lets user2 buy the star and decrease the funds after the sale", async () => {
+  let instance = await StarNotary.deployed();
+  let user1 = accounts[6];
+  let user2 = accounts[7];
+  let starId = 8;
+  let starPrice = web3.utils.toWei(".01", "ether");
+  let value = web3.utils.toWei(".05", "ether");
+  await instance.createStar("Test Star 5", starId, { from: user1 });
+  await instance.putStarUpForSale(starId, starPrice, { from: user1 });
+  let user2BalancePriorToSale = await web3.eth.getBalance(user2);
+  await instance.buyStar(starId, { from: user2, value, gasPrice: 0 });
+  let user2BalanceAfterSale = await web3.eth.getBalance(user2);
+  assert.equal(
+    Number(user2BalanceAfterSale) + Number(starPrice),
+    Number(user2BalancePriorToSale)
+  );
+});
